@@ -45,6 +45,12 @@ func autoType(infos map[string]string) error {
 		commands = "username :tab pass"
 	}
 
+	cmd := execCommand("setxkbmap", "fr")
+	_, err := cmd.CombinedOutput()
+	if err != nil {
+		return err
+	}
+
 	for _, command := range strings.Split(commands, " ") {
 		switch command {
 		case ":tab":

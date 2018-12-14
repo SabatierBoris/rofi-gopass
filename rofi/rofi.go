@@ -57,9 +57,7 @@ func (r Rofi) Run() error {
 		return fmt.Errorf("unknown action")
 	}
 
-	action(data)
-
-	return nil
+	return action(data)
 }
 
 func (r Rofi) display() (string, Command, error) {

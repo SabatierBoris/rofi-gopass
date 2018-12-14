@@ -43,6 +43,7 @@ func (GoPass) GetInfos(entry string) (map[string]string, error) {
 
 	var items yaml.MapSlice
 	yaml.Unmarshal([]byte(strings.Join(data[1:], "\n")), &items)
+	fmt.Println(items)
 
 	for _, item := range items {
 		key, ok := item.Key.(string)
