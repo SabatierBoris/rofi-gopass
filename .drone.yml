@@ -1,0 +1,7 @@
+pipeline:
+  backend:
+    image: golang
+    commands:
+      - go mod download
+      - go build
+      - go test
