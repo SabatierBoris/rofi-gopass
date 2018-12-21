@@ -9,13 +9,24 @@ import (
 )
 
 // GoPass object permit to inteact with the GoPass cmd
-type GoPass struct{}
+type GoPass struct {
+	commandRunner func(string, ...string) *exec.Cmd
+}
 
-var execCommand = exec.Command
+// Create a GoPass object
+func Create(commandRunner func(string, ...string) *exec.Cmd) (*GoPass, error) {
+	if commandRunner == nil {
+		return nil, fmt.Errorf("commandRunner must be defined")
+	}
+
+	return &GoPass{
+		commandRunner,
+	}, nil
+}
 
 // List get all entries
-func (GoPass) List() ([]string, error) {
-	cmd := execCommand("gopass", "ls", "--flat")
+func (g GoPass) List() ([]string, error) {
+	cmd := g.commandRunner("gopass", "ls", "--flat")
 
 	out, err := cmd.CombinedOutput()
 
@@ -27,8 +38,8 @@ func (GoPass) List() ([]string, error) {
 }
 
 // GetInfos give all informations about entry
-func (GoPass) GetInfos(entry string) (map[string]string, error) {
-	cmd := execCommand("gopass", "show", entry)
+func (g GoPass) GetInfos(entry string) (map[string]string, error) {
+	cmd := g.commandRunner("gopass", "show", entry)
 
 	out, err := cmd.CombinedOutput()
 
@@ -62,9 +73,9 @@ func (GoPass) GetInfos(entry string) (map[string]string, error) {
 }
 
 // Clip password to the clipboard
-func (GoPass) Clip(entry string) error {
+func (g GoPass) Clip(entry string) error {
 	fmt.Println("Call gopass.Clip")
-	cmd := execCommand("gopass", "show", "-c", entry)
+	cmd := g.commandRunner("gopass", "show", "-c", entry)
 
 	out, err := cmd.CombinedOutput()
 	fmt.Println(string(out))

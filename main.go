@@ -14,7 +14,10 @@ var execCommand = exec.Command
 func main() {
 	//TODO Parse configuration with viper/cobra
 
-	gp := gopass.GoPass{}
+	gp, err := gopass.Create(execCommand)
+	if err != nil {
+		return
+	}
 	items, _ := gp.List()
 
 	rofi := rofi.Rofi{
